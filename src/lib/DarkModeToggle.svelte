@@ -3,6 +3,7 @@
   import { theme } from "$lib/themeStore";
   import Icon from "$lib/Icon.svelte";
 
+  let title: string;
   let icon: string;
   let activeIcon: string;
   let active = false;
@@ -22,6 +23,7 @@
   }
 
   function lightMode() {
+    title = "Switch to dark mode";
     icon = "sun";
     activeIcon = "sun-set";
     handleClick = () => {
@@ -30,6 +32,7 @@
   }
 
   function darkMode() {
+    title = "Switch to light mode";
     icon = "moon";
     activeIcon = "sun-rise";
     handleClick = () => {
@@ -63,6 +66,7 @@
   on:blur={setInactive}
   on:mouseenter={setActive}
   on:mouseleave={setInactive}
+  {title}
 >
   <Icon name={active ? activeIcon : icon} width="30" height="30" />
 </button>
