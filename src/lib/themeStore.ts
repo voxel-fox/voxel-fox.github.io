@@ -4,7 +4,17 @@ import { writable, get } from "svelte/store";
 
 const getStorgeValue = <T>(key: string): T | null => {
   const savedValue = localStorage.getItem(key);
-  return savedValue !== null ? <T>JSON.parse(savedValue) : null;
+
+  try {
+    return savedValue !== null ? <T>JSON.parse(savedValue) : null;
+  } catch (e) {
+    console.error(
+      "Failed to parse saved value. Removing the key to be safe.",
+      e
+    );
+    localStorage.removeItem(key);
+    return null;
+  }
 };
 
 const themeStore = (intialValue: string): Writable<string> => {
@@ -21,7 +31,6 @@ const themeStore = (intialValue: string): Writable<string> => {
   }
 
   store.subscribe((val) => {
-    console.log(`themeStore.subscribe: ${val}`);
     if (val === null) {
       localStorage.removeItem(key);
     } else {
@@ -30,7 +39,6 @@ const themeStore = (intialValue: string): Writable<string> => {
   });
 
   window.addEventListener("storage", () => {
-    console.log(`themeStore.storage: ${get(store)}`);
     const value = <string>getStorgeValue(key);
     if (value !== get(store)) {
       store.set(value);
