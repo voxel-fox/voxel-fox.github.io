@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/env";
   import { theme } from "$lib/themeStore";
   import { systemTheme } from "$lib/useSystemTheme";
   import Icon from "$lib/Icon.svelte";
@@ -13,12 +14,12 @@
     active = false;
   }
 
-  $: if ($theme !== "dark" && $theme !== "light") {
+  $: if (browser && $theme !== "dark" && $theme !== "light") {
     document.documentElement.style.removeProperty("color-scheme");
     delete document.documentElement.dataset.theme;
   }
 
-  $: if ($theme === "dark" || $theme === "light") {
+  $: if (browser && ($theme === "dark" || $theme === "light")) {
     document.documentElement.style.setProperty("color-scheme", $theme);
     document.documentElement.dataset.theme = $theme;
   }
